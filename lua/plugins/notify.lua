@@ -165,19 +165,19 @@ return {
               min_width = 40,
               height = "auto",
             },
-            border = {
-              style = "none",
-              padding = { 2, 3 },
-            },
-            filter_options = {},
-            win_options = {
-              winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
-            },
+            -- border = {
+            --   style = "none",
+            --   padding = { 2, 3 },
+            -- },
+            -- filter_options = {},
+            -- win_options = {
+            --   winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+            -- },
           },
           popupmenu = {
             relative = "editor",
             position = {
-              row = "65%",
+              row = "60%",
               col = "50%",
             },
             size = {
@@ -187,18 +187,17 @@ return {
               -- max_width = 80,
             },
             border = {
-              style = "none",
-              padding = { 2, 3 },
+              style = "rounded",
+              padding = { 0, 1 },
             },
             win_options = {
-
-              winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
-              -- winhighlight = {
-              --   Normal = "Normal",
-              --   FloatBorder = "DiagnosticInfo",
-              --   CursorLine = "NoicePopupmenuSelected",
-              --   Search = "NoicePopupmenuMatch"
-              -- },
+              -- winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+              winhighlight = {
+                Normal = "Normal",
+                FloatBorder = "DiagnosticInfo",
+                CursorLine = "NoicePopupmenuSelected",
+                Search = "NoicePopupmenuMatch"
+              },
               -- cursorline = true,
             },
           },
