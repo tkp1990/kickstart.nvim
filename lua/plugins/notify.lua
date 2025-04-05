@@ -131,6 +131,16 @@ return {
         --     input = {},
         --   },
         -- },
+        cmdline = {
+          format = {
+            search_down = {
+              view = "cmdline",
+            },
+            search_up = {
+              view = "cmdline",
+            },
+          },
+        },
         messages = {
           enabled = true,
           view = "notify",
