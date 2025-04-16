@@ -108,29 +108,6 @@ return {
     },
     config = function()
       require("noice").setup({
-        -- cmdline = {
-        --   enabled = true,
-        --   view = "cmdline_popup",
-        --   opts = {
-        --     position = {
-        --       row = 5,
-        --       col = "50%",
-        --     },
-        --     size = {
-        --       width = "50%",
-        --       height = "auto",
-        --     },
-        --   },
-        --   format = {
-        --     cmdline = { pattern = "^:", icon = "", lang = "vim" },
-        --     search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" },
-        --     search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
-        --     filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
-        --     lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
-        --     help = { pattern = "^:%s*he?l?p?%s+", icon = "" },
-        --     input = {},
-        --   },
-        -- },
         cmdline = {
           format = {
             search_down = {
@@ -149,11 +126,6 @@ return {
           view_history = "messages",
           view_search = "virtualtext",
         },
-        -- popupmenu = {
-        --   enabled = true,
-        --   backend = "nui",
-        --   kind_icons = {},
-        -- },
         views = {
           cmdline_popup = {
             position = {
