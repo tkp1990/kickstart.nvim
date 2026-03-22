@@ -17,12 +17,12 @@ return {
   config = function()
     require("catppuccin").setup({
       -- Available flavors: latte, frappe, macchiato, mocha
-      flavour = "mocha", -- Default flavor
+      flavour = "frappe", -- Slightly lighter dark flavor than mocha
       
       -- Background settings
       background = {
         light = "latte",
-        dark = "mocha",
+        dark = "frappe",
       },
       
       -- Transparency settings
@@ -131,8 +131,8 @@ return {
         vim.cmd("colorscheme catppuccin")
       else
         -- Toggle between dark and light
-        local current = vim.g.catppuccin_flavour or "mocha"
-        local new = current == "latte" and "mocha" or "latte"
+        local current = vim.g.catppuccin_flavour or "frappe"
+        local new = current == "latte" and "frappe" or "latte"
         vim.g.catppuccin_flavour = new
         vim.cmd("colorscheme catppuccin")
       end
@@ -146,4 +146,3 @@ return {
     -- vim.keymap.set("n", "<leader>tht", "<cmd>CatppuccinSwitch<cr>", { desc = "Toggle theme" })
   end,
 }
-

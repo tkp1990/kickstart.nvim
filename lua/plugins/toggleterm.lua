@@ -57,20 +57,21 @@ return {
     vim.keymap.set('n', '<leader>th', '<Cmd>ToggleTerm direction=horizontal<CR>', opts)
     vim.keymap.set('n', '<leader>tv', '<Cmd>ToggleTerm direction=vertical<CR>', opts)
     vim.keymap.set('n', '<leader>tf', '<Cmd>ToggleTerm direction=float<CR>', opts)
-    
-    -- Terminal navigation
-    function _G.set_terminal_keymaps()
-      local term_opts = {buffer = 0}
-      vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], term_opts)
-      vim.keymap.set('t', 'jk', [[<C-\><C-n>]], term_opts)
-      vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], term_opts)
-      vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], term_opts)
-      vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], term_opts)
-      vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], term_opts)
-    end
 
-    -- Auto-command to set terminal keymaps when terminal opens
-    vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+    local terminal_group = vim.api.nvim_create_augroup('ToggleTermKeymaps', { clear = true })
+    vim.api.nvim_create_autocmd('TermOpen', {
+      group = terminal_group,
+      pattern = 'term://*',
+      callback = function()
+        local term_opts = { buffer = 0 }
+        vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], term_opts)
+        vim.keymap.set('t', 'jk', [[<C-\><C-n>]], term_opts)
+        vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], term_opts)
+        vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], term_opts)
+        vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], term_opts)
+        vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], term_opts)
+      end,
+    })
 
     -- Function to create a terminal with a specific command
     local Terminal = require('toggleterm.terminal').Terminal
@@ -82,12 +83,11 @@ return {
       direction = "float",
     })
 
-    -- Function to toggle lazygit terminal
-    function _G.toggle_lazygit()
+    local function toggle_lazygit()
       lazygit:toggle()
     end
 
     -- Set keymap for lazygit
-    vim.keymap.set('n', '<leader>lg', '<Cmd>lua toggle_lazygit()<CR>', opts)
+    vim.keymap.set('n', '<leader>lg', toggle_lazygit, opts)
   end
 }

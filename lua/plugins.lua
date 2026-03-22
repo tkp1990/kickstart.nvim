@@ -7,7 +7,10 @@ return {
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
-  'github/copilot.vim',
+  {
+    'github/copilot.vim',
+    enabled = vim.fn.isdirectory(vim.fn.stdpath 'config' .. '/pack/github/start/copilot.vim') == 0,
+  },
 
   -- Useful plugin to show you pending keybinds.
   { 
@@ -94,15 +97,6 @@ return {
       end,
     },
   },
-  {
-    -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help ibl`
-    main = 'ibl',
-    opts = {},
-  },
-
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 

@@ -6,23 +6,15 @@ return {
   {
     'williamboman/mason.nvim',
     lazy = false,
-    config = function ()
-      require("mason").setup()
-    end,
-    opts = {
-      ensure_installed = {
-        "rust_analyzer",
-      },
-    },
+    opts = {},
   },
   {
-   'williamboman/mason-lspconfig.nvim',
+    'williamboman/mason-lspconfig.nvim',
     lazy = false,
-    config = function ()
-      require('mason-lspconfig').setup()
-    end,
+    dependencies = { 'williamboman/mason.nvim' },
     opts = {
-      auto_install = true,
+      automatic_installation = true,
+      ensure_installed = { 'lua_ls', 'rust_analyzer' },
     },
   },
 
@@ -38,37 +30,22 @@ return {
     end
   },
   {
-    'simrat39/rust-tools.nvim',
-    ft = "rust",
-    dependencies = "neovim/nvim-lspconfig",
-    config = function()
-      local rt = require("rust-tools")
-      rt.setup(
-        {
-          dap = {
-            adapter = require('dap').adapters.lldb,
-          },
-          server = {
-            on_attach = function(_, bufnr)
-              -- Custom keybindings for rust-tools
-              vim.keymap.set("n", "<Leader>dk", rt.hover_actions.hover_actions, { buffer = bufnr })
-              vim.keymap.set("n", "<Leader>da", rt.code_action_group.code_action_group, { buffer = bufnr })
-            end,
-          },
-        }
-      )
-    end
-  },
-  {
     'saecki/crates.nvim',
-    ft = {"toml"},
+    ft = { 'toml' },
+    dependencies = { 'hrsh7th/nvim-cmp' },
     config = function(_, opts)
-      local crates  = require('crates')
+      local crates = require('crates')
+      local cmp = require('cmp')
+
       crates.setup(opts)
-      require('cmp').setup.buffer({
-        sources = { { name = "crates" }}
-      })
-      crates.show()
+
+      cmp.setup.buffer {
+        sources = cmp.config.sources({ { name = 'crates' } }, {
+          { name = 'nvim_lsp' },
+          { name = 'path' },
+          { name = 'buffer' },
+        }),
+      }
     end,
   },
   {
@@ -142,18 +119,18 @@ return {
             'rust',
           },
           settings = {
-            ['rust_analyzer']= {
+            ['rust_analyzer'] = {
               imports = {
                 granularity = {
-                  group = "module",
+                  group = 'module',
                 },
-                prefix = "self",
+                prefix = 'self',
               },
               cargo = {
-                allfeatures = true,
+                allFeatures = true,
                 buildscripts = {
                   enable = true,
-                }
+                },
               },
               procMacro = {
                 enable = true,
@@ -166,11 +143,13 @@ return {
         -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
         lua_ls = {
-          Lua = {
-            workspace = { checkThirdParty = false },
-            telemetry = { enable = false },
-            -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            diagnostics = { disable = { 'missing-fields' } },
+          settings = {
+            Lua = {
+              workspace = { checkThirdParty = false },
+              telemetry = { enable = false },
+              -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+              diagnostics = { disable = { 'missing-fields' } },
+            },
           },
         },
       }
@@ -182,26 +161,14 @@ return {
       -- Ensure the servers above are installed
       local mason_lspconfig = require 'mason-lspconfig'
 
-      mason_lspconfig.setup {
-        ensure_installed = vim.tbl_keys(servers),
-      }
-
-      local rust_tools = require 'rust-tools'
-      rust_tools.opts = function ()
-        servers = {
-          on_attach = on_attach,
-          capabilities = capabilities,
-        }
-      end
-
       mason_lspconfig.setup_handlers {
         function(server_name)
-          require('lspconfig')[server_name].setup {
+          local server = servers[server_name] or {}
+
+          require('lspconfig')[server_name].setup(vim.tbl_deep_extend('force', {
             capabilities = capabilities,
             on_attach = on_attach,
-            settings = servers[server_name],
-            filetypes = (servers[server_name] or {}).filetypes,
-          }
+          }, server))
         end,
       }
     end,

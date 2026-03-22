@@ -39,9 +39,9 @@ return {
       if telescope_loaded then
         telescope.load_extension("notify")
         -- Add keybinding to view notification history
-        vim.keymap.set("n", "<leader>nh", function()
+        vim.keymap.set("n", "<leader>nn", function()
           require("telescope").extensions.notify.notify()
-        end, { desc = "View notification history" })
+        end, { desc = "Notify History" })
       end
     end,
   },
