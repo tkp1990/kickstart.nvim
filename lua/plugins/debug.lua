@@ -129,24 +129,27 @@ return {
       },
     }
 
-    dap.adapters.gdb = {
-      type = 'executable',
-      command = '/opt/homebrew/bin/gdb',
-      args = { "-i", "dap" }
-    }
-
-    dap.configurations.rust = {
-      {
-        name = 'Launch',
-        type = 'gdb',
-        request = 'launch',
-        program = function()
-          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
-        end,
-        cwd = '${workspaceFolder}',
-        externalTerminal = true,
+    local gdb_path = vim.fn.exepath 'gdb'
+    if gdb_path ~= '' then
+      dap.adapters.gdb = {
+        type = 'executable',
+        command = gdb_path,
+        args = { '-i', 'dap' },
       }
-    }
+
+      dap.configurations.rust = {
+        {
+          name = 'Launch',
+          type = 'gdb',
+          request = 'launch',
+          program = function()
+            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+          end,
+          cwd = '${workspaceFolder}',
+          externalTerminal = true,
+        },
+      }
+    end
 
     -- Change breakpoint icons
     -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })

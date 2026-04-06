@@ -52,14 +52,14 @@ return {
     "rust-lang/rust.vim",
     ft = "rust",
     init = function ()
-      vim.g.rustfmt_autosave = 1
+      vim.g.rustfmt_autosave = 0
     end
   },
   {
     'neovim/nvim-lspconfig',
     lazy = false,
     config = function ()
-      local on_attach = function(_, bufnr)
+      local on_attach = function(client, bufnr)
         -- NOTE: Remember that lua is a real programming language, and as such it is possible
         -- to define small helper and utility functions so you don't have to repeat yourself
         -- many times.
@@ -72,6 +72,11 @@ return {
           end
 
           vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+        end
+
+        local navic = require 'nvim-navic'
+        if client.server_capabilities.documentSymbolProvider then
+          navic.attach(client, bufnr)
         end
 
         nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
@@ -98,6 +103,11 @@ return {
 
         -- Create a command `:Format` local to the LSP buffer
         vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+          local ok, conform = pcall(require, 'conform')
+          if ok then
+            conform.format { async = false, lsp_format = 'fallback' }
+            return
+          end
           vim.lsp.buf.format()
         end, { desc = 'Format current buffer with LSP' })
       end

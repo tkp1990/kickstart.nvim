@@ -227,6 +227,7 @@ require('which-key').add {
   -- { "<leader>h", group = "Git [H]unk" },
   { '<leader>w', group = '[W]orkspace' },
   { '<leader>t', group = '[T]oggle' },
+  { '<leader>x', group = 'Diagnostics' },
   { '<leader>r', group = '[R]ename' },
   -- Visual mode leader mappings (separate registration)
   { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },

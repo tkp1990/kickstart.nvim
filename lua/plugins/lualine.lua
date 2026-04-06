@@ -18,11 +18,6 @@ return {
   config = function()
     local lualine = require('lualine')
 
-    -- Get current theme
-    local function get_theme()
-      return "horizon"
-    end
-
     -- Helper function to determine window width
     local function has_width_gt(cols)
       -- Check if the current window width is greater than a given number of columns
@@ -303,11 +298,10 @@ return {
       cond = function() return has_width_gt(70) end -- Only show time when enough space
     }
 
-    -- Configure lualine setup
-    lualine.setup({
+    local lualine_opts = {
       options = {
         icons_enabled = true,
-        theme = get_theme(),
+        theme = 'auto',
         component_separators = { left = '', right = ''},
         section_separators = { left = '', right = ''},
         disabled_filetypes = {
@@ -345,17 +339,8 @@ return {
       winbar = {},
       inactive_winbar = {},
       extensions = {'nvim-tree', 'toggleterm', 'quickfix', 'fugitive'}
-    })
+    }
 
-    -- Dynamic theme update based on Catppuccin changes
-    vim.api.nvim_create_autocmd("ColorScheme", {
-      callback = function()
-        lualine.setup({
-          options = {
-            theme = get_theme(),
-          }
-        })
-      end,
-    })
+    lualine.setup(lualine_opts)
   end,
 }
