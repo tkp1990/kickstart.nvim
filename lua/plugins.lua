@@ -7,21 +7,17 @@ return {
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
-  {
-    'github/copilot.vim',
-    enabled = vim.fn.isdirectory(vim.fn.stdpath 'config' .. '/pack/github/start/copilot.vim') == 0,
-  },
-
   -- Useful plugin to show you pending keybinds.
-  { 
-    'folke/which-key.nvim',
-    opts = {}  },
   {
-    "echasnovski/mini.icons",
+    'folke/which-key.nvim',
+    opts = {},
+  },
+  {
+    'echasnovski/mini.icons',
     lazy = true,
     config = function()
-      require("mini.icons").setup()
-    end
+      require('mini.icons').setup()
+    end,
   },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes

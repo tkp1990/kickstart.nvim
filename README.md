@@ -5,7 +5,7 @@ This branch contains a personalized Neovim setup that started from `kickstart.nv
 ## What Changed From Kickstart
 
 - Modular plugin specs instead of keeping everything in a single `init.lua`
-- Catppuccin theme with the darker variants available and `frappe` as the default
+- Gruvbox theme as the default colorscheme
 - Custom statusline with `lualine`
 - `neo-tree` for file browsing
 - `toggleterm` for floating and split terminal workflows
@@ -28,7 +28,7 @@ Key files:
 
 Main plugins currently configured in this branch:
 
-- `catppuccin/nvim`
+- `rebelot/kanagawa.nvim`
 - `nvim-telescope/telescope.nvim`
 - `nvim-treesitter/nvim-treesitter`
 - `neovim/nvim-lspconfig`
@@ -44,7 +44,6 @@ Main plugins currently configured in this branch:
 - `folke/todo-comments.nvim`
 - `lewis6991/gitsigns.nvim`
 - `mfussenegger/nvim-lint`
-- `github/copilot.vim`
 
 ## Requirements
 
@@ -82,8 +81,7 @@ nvim
 
 ## Notes
 
-- There is a local `pack/github/start/copilot.vim` checkout in this repo. The Lazy spec is guarded so Copilot is not loaded twice when that local package exists.
-- Theme switching is available through `:CatppuccinSwitch [flavor]`.
+- The default colorscheme is `kanagawa`.
 - The config still keeps some Kickstart structure and comments, but the active behavior now lives primarily in the modular plugin files.
 
 ## Useful Commands
@@ -91,9 +89,7 @@ nvim
 - `:Lazy` to inspect plugin state
 - `:Mason` to manage LSP servers, linters, and DAP adapters
 - `:checkhealth` to inspect environment issues
-- `:CatppuccinSwitch frappe`
-- `:CatppuccinSwitch mocha`
-- `:CatppuccinSwitch latte`
+- `:colorscheme kanagawa`
 
 ## Branch Context
 
