@@ -11,9 +11,8 @@ return {
   {
     'williamboman/mason-lspconfig.nvim',
     lazy = false,
-    dependencies = { 'williamboman/mason.nvim' },
+    dependencies = { 'williamboman/mason.nvim', 'neovim/nvim-lspconfig' },
     opts = {
-      automatic_installation = true,
       ensure_installed = { 'lua_ls', 'rust_analyzer' },
     },
   },
@@ -164,23 +163,25 @@ return {
         },
       }
 
-      -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-      -- Ensure the servers above are installed
-      local mason_lspconfig = require 'mason-lspconfig'
+      vim.lsp.config('*', {
+        capabilities = capabilities,
+      })
 
-      mason_lspconfig.setup_handlers {
-        function(server_name)
-          local server = servers[server_name] or {}
+      for name, cfg in pairs(servers) do
+        vim.lsp.config(name, cfg)
+      end
 
-          require('lspconfig')[server_name].setup(vim.tbl_deep_extend('force', {
-            capabilities = capabilities,
-            on_attach = on_attach,
-          }, server))
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client then
+            on_attach(client, args.buf)
+          end
         end,
-      }
+      })
     end,
   }
 }
