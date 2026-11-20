@@ -77,7 +77,7 @@ Then start Neovim:
 nvim
 ```
 
-`lazy.nvim` will install the configured plugins on first launch.
+Plugins are installed by the built-in `vim.pack` (Neovim 0.12+) on first launch. The list lives in `lua/plugins.lua`; exact versions are pinned in `nvim-pack-lock.json`.
 
 ## Notes
 
@@ -86,7 +86,8 @@ nvim
 
 ## Useful Commands
 
-- `:Lazy` to inspect plugin state
+- `:lua vim.pack.update()` to update plugins (review, then `:w` to apply)
+- `:checkhealth vim.pack` to inspect plugin state
 - `:Mason` to manage LSP servers, linters, and DAP adapters
 - `:checkhealth` to inspect environment issues
 - `:colorscheme kanagawa`
