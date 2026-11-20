@@ -13,7 +13,7 @@ return {
     opts = {},
   },
   {
-    'echasnovski/mini.icons',
+    'nvim-mini/mini.icons',
     lazy = true,
     config = function()
       require('mini.icons').setup()
@@ -41,25 +41,21 @@ return {
         end
 
         -- Navigation
-        map({ 'n', 'v' }, ']c', function()
+        map('n', ']c', function()
           if vim.wo.diff then
-            return ']c'
+            vim.cmd.normal { ']c', bang = true }
+          else
+            gs.nav_hunk 'next'
           end
-          vim.schedule(function()
-            gs.next_hunk()
-          end)
-          return '<Ignore>'
-        end, { expr = true, desc = 'Jump to next hunk' })
+        end, { desc = 'Jump to next hunk' })
 
-        map({ 'n', 'v' }, '[c', function()
+        map('n', '[c', function()
           if vim.wo.diff then
-            return '[c'
+            vim.cmd.normal { '[c', bang = true }
+          else
+            gs.nav_hunk 'prev'
           end
-          vim.schedule(function()
-            gs.prev_hunk()
-          end)
-          return '<Ignore>'
-        end, { expr = true, desc = 'Jump to previous hunk' })
+        end, { desc = 'Jump to previous hunk' })
 
         -- Actions
         -- visual mode
@@ -73,9 +69,10 @@ return {
         map('n', '<leader>hs', gs.stage_hunk, { desc = 'git stage hunk' })
         map('n', '<leader>hr', gs.reset_hunk, { desc = 'git reset hunk' })
         map('n', '<leader>hS', gs.stage_buffer, { desc = 'git Stage buffer' })
-        map('n', '<leader>hu', gs.undo_stage_hunk, { desc = 'undo stage hunk' })
+        -- ponytail: undo_stage_hunk is deprecated; <leader>hs on a staged hunk unstages it
         map('n', '<leader>hR', gs.reset_buffer, { desc = 'git Reset buffer' })
         map('n', '<leader>hp', gs.preview_hunk, { desc = 'preview git hunk' })
+        map('n', '<leader>hi', gs.preview_hunk_inline, { desc = 'preview git hunk inline' })
         map('n', '<leader>hb', function()
           gs.blame_line { full = false }
         end, { desc = 'git blame line' })
@@ -83,13 +80,17 @@ return {
         map('n', '<leader>hD', function()
           gs.diffthis '~'
         end, { desc = 'git diff against last commit' })
+        map('n', '<leader>hq', gs.setqflist, { desc = 'git hunks to quickfix (file)' })
+        map('n', '<leader>hQ', function()
+          gs.setqflist 'all'
+        end, { desc = 'git hunks to quickfix (repo)' })
 
         -- Toggles
         map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'toggle git blame line' })
-        map('n', '<leader>td', gs.toggle_deleted, { desc = 'toggle git show deleted' })
+        map('n', '<leader>tw', gs.toggle_word_diff, { desc = 'toggle git word diff' })
 
         -- Text object
-        map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'select git hunk' })
+        map({ 'o', 'x' }, 'ih', gs.select_hunk, { desc = 'select git hunk' })
       end,
     },
   },

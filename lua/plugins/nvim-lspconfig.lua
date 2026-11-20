@@ -4,14 +4,14 @@ return {
   -- LSP Configuration & Plugins
   -- Automatically install LSPs to stdpath for neovim
   {
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     lazy = false,
     opts = {},
   },
   {
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     lazy = false,
-    dependencies = { 'williamboman/mason.nvim', 'neovim/nvim-lspconfig' },
+    dependencies = { 'mason-org/mason.nvim', 'neovim/nvim-lspconfig' },
     opts = {
       ensure_installed = { 'lua_ls', 'rust_analyzer' },
     },
@@ -23,10 +23,14 @@ return {
 
   -- Additional lua configuration, makes nvim stuff amazing!
   {
-    'folke/neodev.nvim',
-    config = function ()
-      require('neodev').setup()
-    end
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    opts = {
+      library = {
+        -- Load luvit types when the `vim.uv` word is found
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      },
+    },
   },
   {
     'saecki/crates.nvim',

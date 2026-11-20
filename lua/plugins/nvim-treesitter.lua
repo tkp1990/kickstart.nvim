@@ -8,23 +8,31 @@ return {
     build = ':TSUpdate',
     config = function()
       local ts = require('nvim-treesitter')
+      ts.install(ensure_installed) -- async, no-op for parsers already installed
 
-      local function is_installed(lang)
-        if type(ts.get_installed) ~= 'function' then return true end
-        local ok, list = pcall(ts.get_installed)
-        if not ok or type(list) ~= 'table' then return true end
-        return vim.list_contains(list, lang)
+      local function try_attach(buf, lang)
+        -- Buffer may be gone by the time an async install finishes
+        if not vim.api.nvim_buf_is_valid(buf) then return end
+        if not vim.treesitter.language.add(lang) then return end
+        vim.treesitter.start(buf, lang)
+        -- Only use treesitter indent when the language has an indent query
+        if vim.treesitter.query.get(lang, 'indents') then
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
       end
 
       vim.api.nvim_create_autocmd('FileType', {
-        pattern = ensure_installed,
         callback = function(args)
-          local lang = args.match
-          if not is_installed(lang) and type(ts.install) == 'function' then
-            pcall(ts.install, { lang })
+          local buf = args.buf
+          local lang = vim.treesitter.language.get_lang(args.match)
+          if not lang then return end
+
+          if vim.list_contains(ensure_installed, lang) and not vim.list_contains(ts.get_installed 'parsers', lang) then
+            ts.install(lang):await(function() try_attach(buf, lang) end)
+          else
+            -- Attaches if a parser exists (installed or bundled with nvim), otherwise no-op
+            try_attach(buf, lang)
           end
-          pcall(vim.treesitter.start)
-          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
       })
     end,
